@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Textbox Preview</title>
+
+        <style>
+            *{
+                margin: 0;
+            }
+            html, body{
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body style="background-color: black; display:grid; grid-template-columns: 1fr 193px 192px 193px 1fr; grid-template-rows: 1fr 50px 50px 152px 1fr; row-gap: 10px;">
+        <input id="textBox" style="grid-row: 2; grid-column: 2 / span 3;" type="text" placeholder="insira seu texto aqui ~ feito por semnet :)">
+        <input id="btnNormal" style="grid-row: 3; grid-column: 2;" type="button" value="Normal">
+        <input id="btnSans" style="grid-row: 3; grid-column: 3;" type="button" value="Sans">
+        <input id="btnPapyrus" style="grid-row: 3; grid-column: 4;" type="button" value="Papyrus">
+
+        <canvas id="canvas" style="grid-row: 4; grid-column: 2 / span 3;" width="578" height="152"></canvas>
+        <script>
+            let curFont;
+
+            let canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+
+            let fonts = {};
+            async function getFonts(){
+                let names = [
+                    "comicsans",
+                    "curs",
+                    "dmg",
+                    "main",
+                    "maintext_2",
+                    "maintext",
+                    "papyrus",
+                    "plain",
+                    "plainbig",
+                    "small",
+                    "wingdings"
+                ]
+                for(let i = 0; i < names.length; i++){
+                    fonts[names[i]] = {};
+
+                    let textFile = await fetch("fontes/glyphs_fnt_"+ names[i] +".txt");
+                    fonts[names[i]].text = await textFile.text();
+
+                    let imageFile = new Image();
+                    imageFile.src = "fontes/fnt_"+ names[i] +".png";
+                    fonts[names[i]].image = imageFile;
+
+                    let characters = {};
+                    let tempArray = fonts[names[i]].text.split(/;-?[0-9]\r\n/);
+                    for(let i = 1; i < tempArray.length; i++){
+                        let subTempArray = tempArray[i].split(/;/);
+                        let character = subTempArray.shift()
+                        characters[character] = subTempArray;
+                    }
+                    fonts[names[i]].characters = characters;
+                }
+
+                curFont = fonts.maintext;
+            }
+            getFonts()
+
+            function printText(font, text, x, y){
+                let offset = 0;
+                for(let i = 0; i < text.length; i++){
+                    let character = text[i];
+                    let characterInfo = font.characters[character.charCodeAt(0)];
+
+                    ctx.imageSmoothingEnabled = false;
+                    ctx.drawImage(font.image, characterInfo[0], characterInfo[1], characterInfo[2], characterInfo[3], x+offset, y, characterInfo[2]*2, characterInfo[3]*2);
+
+                    if(font == fonts.maintext){
+                        offset += 16;
+                    } else{
+                        offset += parseInt(characterInfo[2]*2 + 2);
+                    }
+                }
+            }
+
+            let textBox = document.getElementById("textBox");
+            function updateText(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.beginPath();
+                ctx.lineWidth = "6";
+                ctx.strokeStyle = "#ffffff";
+                ctx.rect(3, 3, 572, 146);
+                ctx.stroke();
+
+                let lines = textBox.value.split("&");
+                let offset = 0;
+                for(let i = 0; i < lines.length; i++){
+                    let text = lines[i].replaceAll("^1", "");
+                    text = text.replaceAll("/", "");
+                    text = text.replaceAll("%%", "");
+
+                    for(let i = 0; i < Math.floor(text.length/33)+1; i++){
+                        printText(curFont, text.substring(i*33, (i+1)*33), 28, 20+offset);
+                        offset += 36
+                    }
+                }
+            }
+            textBox.oninput = updateText;
+
+            let btnNormal = document.getElementById("btnNormal");
+            btnNormal.onclick = () => {
+                curFont = fonts.maintext;
+                updateText()
+            }
+            let btnSans = document.getElementById("btnSans");
+            btnSans.onclick = () => {
+                curFont = fonts.comicsans;
+                updateText()
+            }
+            let btnPapyrus = document.getElementById("btnPapyrus");
+            btnPapyrus.onclick = () => {
+                curFont = fonts.papyrus;
+                updateText()
+            }
+        </script>
+    </body>
+</html>
