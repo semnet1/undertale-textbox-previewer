@@ -43,11 +43,11 @@ async function getFonts(){
         fonts[names[i]] = {};
         fonts[names[i]].name = names[i];
 
-        let textFile = await fetch("fontes/glyphs_fnt_"+ names[i] +".txt");
+        let textFile = await fetch("fonts/glyphs_fnt_"+ names[i] +".txt");
         fonts[names[i]].text = await textFile.text();
 
         let imageFile = new Image();
-        imageFile.src = "fontes/fnt_"+ names[i] +".png";
+        imageFile.src = "fonts/fnt_"+ names[i] +".png";
         fonts[names[i]].image = imageFile;
 
         let characters = {};
@@ -101,13 +101,26 @@ function printText(font, text, x, y){
         if(!character) return
         let characterInfo = font.characters[character.charCodeAt(0)];
 
+        if(curFont == fonts.papyrus){
+            if(character == "l") Xoffset += 4;
+            if(character == "i") Xoffset += 4;
+            if(character == "I") Xoffset += 4;
+            if(character == "!") Xoffset += 4;
+            if(character == ".") Xoffset += 4;
+            if(character == "S") Xoffset += 2;
+            if(character == "?") Xoffset += 4;
+            if(character == "D") Xoffset += 2;
+            if(character == "A") Xoffset += 2;
+            if(character == "'") Xoffset += 2;
+        }
+
         ctx.imageSmoothingEnabled = false;
 
         if(size){
             ctx.beginPath();
             ctx.lineWidth = "1";
             ctx.strokeStyle = "#ff0000";
-            ctx.rect(x+Xoffset, y+Yoffset, characterInfo[2]*2, characterInfo[3]*2)
+            ctx.rect(x+Xoffset+0.5, y+Yoffset+0.5, characterInfo[2]*2-1, characterInfo[3]*2-1)
             ctx.stroke();
         }
 
@@ -120,11 +133,40 @@ function printText(font, text, x, y){
 
         ctx.globalCompositeOperation = "source-over";
 
-        if(font == fonts.maintext){
-            Xoffset += 16;
-        } else{
-            Xoffset += parseInt(characterInfo[4])*2;
+        if(curFont == fonts.comicsans){
+            if (character == "w") Xoffset += 4;
+            if (character == "m") Xoffset += 4;
+            if (character == "i") Xoffset -= 4;
+            if (character == "l") Xoffset -= 4;
+            if (character == "s") Xoffset -= 2;
+            if (character == "j") Xoffset -= 2;
         }
+        if(curFont == fonts.papyrus){
+            if(character == "D") Xoffset += 2;
+            if(character == "Q") Xoffset += 6;
+            if(character == "M") Xoffset += 2;
+            if(character == "L") Xoffset -= 2;
+            if(character == "K") Xoffset -= 2;
+            if(character == "C") Xoffset += 2;
+            if(character == ".") Xoffset -= 6;
+            if(character == "!") Xoffset -= 6;
+            if(character == "O") Xoffset += 4;
+            if(character == "W") Xoffset += 4;
+            if(character == "I") Xoffset -= 12;
+            if(character == "T") Xoffset -= 2;
+            if(character == "P") Xoffset -= 4;
+            if(character == "R") Xoffset -= 4;
+            if(character == "A") Xoffset += 2;
+            if(character == "H") Xoffset += 2;
+            if(character == "B") Xoffset += 2;
+            if(character == "G") Xoffset += 2;
+            if(character == "F") Xoffset -= 2;
+            if(character == "?") Xoffset -= 6;
+            if(character == "'") Xoffset -= 12;
+            if(character == "J") Xoffset -= 2;
+            Xoffset += 6;
+        }
+        Xoffset += 16;
 
         if(x+Xoffset > 550){
             Xoffset = 0;
@@ -138,11 +180,10 @@ function printText(font, text, x, y){
 let textBox = document.getElementById("textBox");
 textBox.value = setup.text;
 let faceImg = new Image();
-faceImg.src = "Rosto.png";
+faceImg.src = "img/Rosto.png";
 let face = (setup.face == "true");
 let size = (setup.size == "true");
 function updateText(){
-    console.log("a");
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 

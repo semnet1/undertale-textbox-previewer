@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UT Textbox</title>
-        <link rel="icon" type="image/png" href="icons/favicon.png" />
+        <link rel="icon" type="image/png" href="img/favicon.png" />
 
         <style>
             *{
@@ -30,11 +30,15 @@
 
         <canvas id="canvas" style="grid-row: 4; grid-column: 2" width="578" height="152"></canvas>
 
-        <div style="display:grid; grid-template-columns: 150px 150px 1fr 20px; grid-row: 5; grid-column: 2;">
+        <div style="display:grid; grid-template-columns: auto auto 1fr 20px 20px; grid-row: 5; grid-column: 2; column-gap: 10px;">
             <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkFace" type="checkbox" /> Mostrar Rosto</label>
             <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkSize" type="checkbox" /> Mostrar Tamanhos</label>
-            <button onclick="popup()" style="grid-column: 4; display: flex; align-items: center; justify-content: center;">
-                <img src="icons/popup-link-icon.png" style="width:15px; height:15px;">
+
+            <button onclick="play()" style="grid-column: 4; display: flex; align-items: center; justify-content: center;">
+                <img src="img/play-button-arrowhead.png" style="width:15px; height:15px;">
+            </button>
+            <button onclick="popup()" style="grid-column: 5; display: flex; align-items: center; justify-content: center;">
+                <img src="img/popup-link-icon.png" style="width:15px; height:15px;">
             </button>
         </div>
 
