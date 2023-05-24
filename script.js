@@ -68,7 +68,7 @@ async function getFonts(){
 getFonts()
 
 function printText(font, text, x, y){
-    let color = "#ffffff";
+    let color = "#FFF";
     let Xoffset = 0;
     let Yoffset = 0;
     for(let i = 0; i < text.length; i++){
@@ -79,15 +79,15 @@ function printText(font, text, x, y){
         }
         if(text[i] == "^") i+=2;
         if(text[i] == "\\"){
-            if(text[i+1] == "R") color = "#ff0000";
-            if(text[i+1] == "G") color = "#00ff00";
-            if(text[i+1] == "W") color = "#ffffff";
-            if(text[i+1] == "Y") color = "#ffff00";
+            if(text[i+1] == "R") color = "#FF0000";
+            if(text[i+1] == "G") color = "#00FF00";
+            if(text[i+1] == "W") color = "#FFFFFF";
+            if(text[i+1] == "Y") color = "#FFFF00";
             if(text[i+1] == "X") color = "#000000";
-            if(text[i+1] == "B") color = "#0000ff";
-            if(text[i+1] == "O") color = "#ff0000";
+            if(text[i+1] == "B") color = "#0000FF";
+            if(text[i+1] == "O") color = "#FFA040";
             if(text[i+1] == "L") color = "#FFA914";
-            if(text[i+1] == "P") color = "#ff00ff";
+            if(text[i+1] == "P") color = "#FF00FF";
             if(text[i+1] == "p") color = "#D4BBFF";
 
             i+=2;
