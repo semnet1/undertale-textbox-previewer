@@ -5,6 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UT Textbox</title>
+        <link rel="icon" type="image/png" href="icons/favicon.png" />
 
         <style>
             *{
@@ -13,207 +14,30 @@
             html, body{
                 height: 100%;
             }
+
+            input:focus{
+                outline: none;
+            }
         </style>
     </head>
     <body style="background-color: black; display:grid; grid-template-columns: 1fr 578px 1fr; grid-template-rows: 1fr 50px 50px 152px 20px 1fr; row-gap: 10px;">
-        <input id="textBox" style="grid-row: 2; grid-column: 2" type="text" placeholder="insira seu texto aqui ~ feito por semnet :)">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 50px; grid-row: 3; grid-column: 2">
-            <input id="btnNormal" type="button" value="Normal">
-            <input id="btnSans" type="button" value="Sans">
-            <input id="btnPapyrus" type="button" value="Papyrus">
-            <input id="btnOthers" type="button" value="● ● ●">
-        </div>
-        <div id="dropdown" style="display:none; position: absolute; flex-direction: column;">
-            <input type="button" value="comicsans">
-            <input type="button" value="curs">
-            <input type="button" value="dmg">
-            <input type="button" value="main">
-            <input type="button" value="maintext_2">
-            <input type="button" value="maintext">
-            <input type="button" value="papyrus">
-            <input type="button" value="plain">
-            <input type="button" value="plainbig">
-            <input type="button" value="small">
-            <input type="button" value="wingdings">
+        <input id="textBox" style="grid-row: 2; grid-column: 2; font-size: 20px;" type="text" placeholder="insira seu texto aqui ~ feito por semnet :)">
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-row: 3; grid-column: 2; column-gap: 10px;">
+            <input id="btnNormal" type="button" value="Normal" style="font-size: 20px;">
+            <input id="btnSans" type="button" value="Sans" style="font-size: 20px;">
+            <input id="btnPapyrus" type="button" value="Papyrus" style="font-size: 20px;">
         </div>
 
         <canvas id="canvas" style="grid-row: 4; grid-column: 2" width="578" height="152"></canvas>
 
-        <div style="display:grid; grid-template-columns: 150px 150px 1fr; grid-row: 5; grid-column: 2;">
-            <label style="color:white;"><input id="checkFace" type="checkbox" /> Mostrar Rosto</label>
-            <label style="color:white;"><input id="checkSize" type="checkbox" /> Mostrar Tamanhos</label>
+        <div style="display:grid; grid-template-columns: 150px 150px 1fr 20px; grid-row: 5; grid-column: 2;">
+            <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkFace" type="checkbox" /> Mostrar Rosto</label>
+            <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkSize" type="checkbox" /> Mostrar Tamanhos</label>
+            <button onclick="popup()" style="grid-column: 4; display: flex; align-items: center; justify-content: center;">
+                <img src="icons/popup-link-icon.png" style="width:15px; height:15px;">
+            </button>
         </div>
 
-        <script>
-            let curFont;
-
-            let canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
-
-            ctx.beginPath();
-            ctx.lineWidth = "6";
-            ctx.strokeStyle = "#ffffff";
-            ctx.rect(3, 3, 572, 146);
-            ctx.stroke();
-
-            let fonts = {};
-            async function getFonts(){
-                let names = [
-                    "comicsans",
-                    "curs",
-                    "dmg",
-                    "main",
-                    "maintext_2",
-                    "maintext",
-                    "papyrus",
-                    "plain",
-                    "plainbig",
-                    "small",
-                    "wingdings"
-                ]
-                for(let i = 0; i < names.length; i++){
-                    fonts[names[i]] = {};
-
-                    let textFile = await fetch("fontes/glyphs_fnt_"+ names[i] +".txt");
-                    fonts[names[i]].text = await textFile.text();
-
-                    let imageFile = new Image();
-                    imageFile.src = "fontes/fnt_"+ names[i] +".png";
-                    fonts[names[i]].image = imageFile;
-
-                    let characters = {};
-                    let tempArray = fonts[names[i]].text.split(/\r\n/);
-                    for(let i = 1; i < tempArray.length; i++){
-                        let subTempArray = tempArray[i].split(/;/);
-                        let character = subTempArray.shift()
-                        characters[character] = subTempArray;
-                    }
-                    fonts[names[i]].characters = characters;
-                }
-
-                curFont = fonts.maintext;
-            }
-            getFonts()
-
-            function printText(font, text, x, y){
-                let Xoffset = 0;
-                let Yoffset = 0;
-                for(let i = 0; i < text.length; i++){
-                    let character = text[i];
-                    let characterInfo = font.characters[character.charCodeAt(0)];
-
-                    ctx.imageSmoothingEnabled = false;
-
-                    if(size){
-                        ctx.beginPath();
-                        ctx.lineWidth = "1";
-                        ctx.strokeStyle = "#ff0000";
-                        ctx.rect(x+Xoffset, y+Yoffset, characterInfo[2]*2, characterInfo[3]*2)
-                        ctx.stroke();
-                    }
-
-                    ctx.drawImage(font.image, characterInfo[0], characterInfo[1], characterInfo[2], characterInfo[3], x+Xoffset, y+Yoffset, characterInfo[2]*2, characterInfo[3]*2);
-
-                    if(font == fonts.maintext){
-                        Xoffset += 16;
-                    } else{
-                        Xoffset += parseInt(characterInfo[2])*2 + 4;
-                        // Xoffset += 16;
-                    }
-
-                    if(x+Xoffset > 550){
-                        Xoffset = 0;
-                        Yoffset += 36;
-                    }
-                }
-
-                return Yoffset;
-            }
-
-            let textBox = document.getElementById("textBox");
-            let faceImg = new Image();
-            faceImg.src = "Rosto.png";
-            let face = false;
-            let size = false;
-            function updateText(){
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.beginPath();
-                ctx.lineWidth = "6";
-                ctx.strokeStyle = "#ffffff";
-                ctx.rect(3, 3, 572, 146);
-                ctx.stroke();
-
-                if(face){
-                    ctx.drawImage(faceImg, 39, 31);
-                }
-
-                let lines = textBox.value.split("&");
-                let offset = 0;
-                for(let i = 0; i < lines.length; i++){
-                    let text = lines[i].replaceAll("^1", "");
-                    text = text.replaceAll("/", "");
-                    text = text.replaceAll("%%", "");
-
-                    offset += printText(curFont, text, 28+(face*116), 20+offset);
-                    offset += 36;
-                }
-            }
-            textBox.oninput = updateText;
-
-            let btnNormal = document.getElementById("btnNormal");
-            btnNormal.onclick = () => {
-                curFont = fonts.maintext;
-                updateText()
-            }
-            let btnSans = document.getElementById("btnSans");
-            btnSans.onclick = () => {
-                curFont = fonts.comicsans;
-                updateText()
-            }
-            let btnPapyrus = document.getElementById("btnPapyrus");
-            btnPapyrus.onclick = () => {
-                curFont = fonts.papyrus;
-                updateText()
-            }
-            let btnOthers = document.getElementById("btnOthers");
-            let dropdown = document.getElementById("dropdown");
-            btnOthers.onclick = () => {
-                if(dropdown.style.display == "none"){
-                    dropdown.style.display = "flex";
-                } else{
-                    dropdown.style.display = "none";
-                }
-
-                let position = btnOthers.getBoundingClientRect();
-                dropdown.style.left = position.left + btnOthers.offsetWidth + "px";
-                dropdown.style.top = position.top + "px";
-            }
-
-            window.onclick = (event) => {
-                if (event.target.id != "btnOthers") {
-                    dropdown.style.display = "none";
-                }
-            }
-
-            let children = dropdown.children;
-            for(let i = 0; i < children.length; i++){
-                children[i].onclick = () => {
-                    curFont = fonts[children[i].value];
-                    updateText();
-                }
-            }
-
-            let checkFace = document.getElementById("checkFace");
-            checkFace.oninput = () => {
-                face = checkFace.checked;
-                updateText();
-            }
-            let checkSize = document.getElementById("checkSize");
-            checkSize.oninput = () => {
-                size = checkSize.checked;
-                updateText();
-            }
-        </script>
+        <script src="script.js"></script>
     </body>
 </html>
