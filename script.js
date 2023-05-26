@@ -68,6 +68,7 @@ async function getFonts(){
 getFonts()
 
 function printText(font, text, x, y){
+    let stringEnd = "\"";
     let color = "#FFF";
     let Xoffset = 0;
     let Yoffset = 0;
@@ -95,6 +96,17 @@ function printText(font, text, x, y){
         if(text[i] == "/") i+=1;
         while(text[i] == "%"){
             i++;
+        }
+        if(text[i] == stringEnd){
+            while(text[i] && text[i] != "+") i++;
+            while(text[i] && text[i] != "\"" && text[i] != "\'") i++;
+            if(text[i]) stringEnd = text[i];
+            continue;
+        };
+
+        if(x+Xoffset > 578){
+            Xoffset = 0;
+            Yoffset += 36;
         }
 
         let character = text[i];
@@ -167,11 +179,6 @@ function printText(font, text, x, y){
             Xoffset += 6;
         }
         Xoffset += 16;
-
-        if(x+Xoffset > 550){
-            Xoffset = 0;
-            Yoffset += 36;
-        }
     }
 
     return Yoffset;
