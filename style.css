@@ -1,0 +1,170 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    height: 100%;
+}
+
+body{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 10px;
+    background-color: black;
+    z-index: 1;
+    padding: 10px;
+}
+
+input[type]:not([type="checkbox"]), select{
+    font-size: 20px;
+    height: 50px;
+    text-align-last: center;
+}
+
+#boxTypes{
+    display: flex;
+    column-gap: 10px;
+}
+
+#boxTypes>input{
+    flex-grow: 1;
+}
+
+#more{
+    display: flex;
+    column-gap: 10px;
+}
+
+label{
+    color:white;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+}
+
+button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
+
+input, button, select{
+    background-color: white;
+    border: 0px;
+    outline: 0px;
+    border-radius: 5px;
+}
+
+input:hover, button:hover, select:hover{
+    background-color: rgb(230, 230, 230);
+}
+
+img{
+    width: 15px;
+    height: 15px;
+}
+
+input:focus{
+    outline: none;
+}
+
+#infoPage, #configsPage{
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    transition: right 400ms;
+    transition-timing-function: ease-out;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+p{
+    font-size: large;
+}
+
+a{
+    color: deepskyblue;
+}
+
+#configsPage input, #configsPage select{
+    width: 100%;
+    height: 30px;
+}
+
+.warning{
+    background-color: rgb(68, 57, 31);
+    border-radius: 5px;
+    color: rgb(252, 225, 159);
+}
+
+input[disabled]{
+    background-color: rgb(179, 179, 179);
+}
+
+input[disabled]:hover{
+    background-color: rgb(161, 161, 161);
+}
+
+#loadingScreen{
+    position: absolute;
+    background-color: black;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    row-gap: 10px;
+    transition: opacity 1s;
+}
+
+#loadingDots{
+    display: flex;
+    column-gap: 5px;
+}
+
+#loadingDots>div{
+    background-color: white;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+#loadingDots>div:nth-child(1){
+    animation: loadingDotsAnim 1s infinite;
+}
+#loadingDots>div:nth-child(2){
+    animation: loadingDotsAnim 1s  150ms infinite;
+}
+#loadingDots>div:nth-child(3){
+    animation: loadingDotsAnim 1s 300ms infinite;
+}
+
+@keyframes loadingDotsAnim {
+    0% {
+      background-color: white;
+    }
+    50% {
+        background-color: black;
+    }
+    100% {
+        background-color: white;
+    }
+}

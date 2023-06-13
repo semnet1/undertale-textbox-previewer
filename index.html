@@ -6,42 +6,110 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UT Textbox</title>
         <link rel="icon" type="image/png" href="img/favicon.png" />
-
-        <style>
-            *{
-                margin: 0;
-            }
-            html, body{
-                height: 100%;
-            }
-
-            input:focus{
-                outline: none;
-            }
-        </style>
+        <link rel="stylesheet" href="style.css">
     </head>
-    <body style="background-color: black; display:grid; grid-template-columns: 1fr 578px 1fr; grid-template-rows: 1fr 50px 50px 152px 20px 1fr; row-gap: 10px;">
-        <input id="textBox" style="grid-row: 2; grid-column: 2; font-size: 20px;" type="text" placeholder="insira seu texto aqui ~ feito por semnet :)">
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; grid-row: 3; grid-column: 2; column-gap: 10px;">
-            <input id="btnNormal" type="button" value="Normal" style="font-size: 20px;">
-            <input id="btnSans" type="button" value="Sans" style="font-size: 20px;">
-            <input id="btnPapyrus" type="button" value="Papyrus" style="font-size: 20px;">
+    <body>
+        <div id="loadingScreen">
+            <h1>Carregando</h1>
+            <div id="loadingDots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
 
-        <canvas id="canvas" style="grid-row: 4; grid-column: 2" width="578" height="152"></canvas>
+        <div id="content">
+            <input id="textInput" type="text" placeholder="insira seu texto aqui ~ feito por semnet :)">
 
-        <div style="display:grid; grid-template-columns: auto auto 1fr 20px 20px; grid-row: 5; grid-column: 2; column-gap: 10px;">
-            <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkFace" type="checkbox" /> Mostrar Rosto</label>
-            <label style="color:white; display: flex; align-items: center; column-gap: 10px;"><input id="checkSize" type="checkbox" /> Mostrar Tamanhos</label>
+            <div id="boxTypes">
+                <input id="textboxButton" type="button" value="Textbox">
+                <input id="bubbleButton" type="button" value="Bubble">
+            </div>
 
-            <button onclick="play()" style="grid-column: 4; display: flex; align-items: center; justify-content: center;">
-                <img src="img/play-button-arrowhead.png" style="width:15px; height:15px;">
-            </button>
-            <button onclick="popup()" style="grid-column: 5; display: flex; align-items: center; justify-content: center;">
-                <img src="img/popup-link-icon.png" style="width:15px; height:15px;">
-            </button>
+            <select id="typerSelect">
+                <option>Custom</option>
+            </select>
+
+            <div id="more">
+                <label><input type="checkbox" onchange="checkFace(this)"/> Mostrar Rosto</label>
+                <label><input type="checkbox" onchange="checkSize(this)"/> Mostrar Tamanhos</label>
+
+                <div style="flex-grow: 1"></div>
+
+                <button onclick="play()">  <img src="img/play-icon.png"> </button>
+                <button onclick="stop()">  <img src="img/stop-icon.png"> </button>
+                <button onclick="copy()">  <img src="img/copy-icon.png"> </button>
+                <button onclick="download()">  <img src="img/download-icon.png"> </button>
+                <button onclick="popout()">  <img src="img/popup-icon.png"> </button>
+                <button onclick="configs()"> <img src="img/gear-icon.png"> </button>
+                <button onclick="info()">  <img src="img/information-icon.png"> </button>
+            </div>
+
+            <canvas id="canvas" width="578" height="152"></canvas>
         </div>
 
-        <script src="script.js"></script>
+        <div id="infoPage">
+            <button onclick="info()"> <img src="img/back-icon.png"> </button>
+            <h2>INFO</h2>
+            <p>esse site foi feito por lorde semnet, o melhor programador da galáxia</p>
+            <p>baseado em fatos reais 💀</p>
+            <p>se gostou deixa um laike e favorita 👍</p>
+
+            <h2>Icones Usados:</h2>
+            <a href="https://www.flaticon.com/free-icon/play_3318660" target="_blank">Play, por abdul allib</a>
+            <a href="https://www.flaticon.com/free-icon/stop-button_4029077" target="_blank">Stop, por Pixel perfect</a>
+            <a href="https://www.flaticon.com/free-icon/copy_9428873" target="_blank">Copy, por Radhe Icon</a>
+            <a href="https://www.flaticon.com/free-icon/download_3031707" target="_blank">Download, por Uniconlabs</a>
+            <a href="https://www.flaticon.com/free-icon/expand-arrows_4705852" target="_blank">Expand Arrows, por itim2101</a>
+            <a href="https://www.flaticon.com/free-icon/gear_484613" target="_blank">Gear, por Freepik</a>
+            <a href="https://www.flaticon.com/free-icon/information-button_108153" target="_blank">Information, por Freepik</a>
+            <a href="https://www.flaticon.com/free-icon/arrow_507257" target="_blank">Arrow, por Kirill Kazachek</a>
+        </div>
+
+        <div id="configsPage">
+            <button onclick="configs()"> <img src="img/back-icon.png"> </button>
+
+            <div id="warning" class="warning">
+                <p>⚠️ Propriedades só podem ser alteradas no typer "Custom"!</p>
+            </div>
+
+            <div>
+                <h3>Fonte:</h3>
+                <select id="fontSelect" disabled></select>
+            </div>
+            <div>
+                <h3>Cor:</h3>
+                <input id="colorInput" type="color" value="#ffffff" disabled>
+            </div>
+            <div>
+                <h3>Final:</h3>
+                <input id="xendInput" type="number" value="548" disabled>
+            </div>
+            <div>
+                <h3>Shake:</h3>
+                <input id="shakeInput" type="number" value="0" disabled>
+            </div>
+            <div>
+                <h3>Velocidade:</h3>
+                <input id="speedInput" type="number" value="1" disabled>
+            </div>
+            <div>
+                <h3>Som:</h3>
+                <select id="soundSelect" disabled><option>txttor</option></select>
+            </div>
+            <div>
+                <h3>Espaçamento:</h3>
+                <input id="spacingInput" type="number" value="8" disabled>
+            </div>
+            <div>
+                <h3>Espaçamento Vertical:</h3>
+                <input id="vspacingInput" type="number" value="18" disabled>
+            </div>
+        </div>
+
+        <script src="typers.js"></script>
+        <script src="assets.js"></script>
+        <script src="setup.js"></script>
+        <script src="render.js"></script>
     </body>
 </html>
