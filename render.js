@@ -22,7 +22,7 @@ function printText(font, text, x, y, color, shake){
     let charactersToRender = (playing) ? stringPos : text.length;
 
     for(let i = 0; i < charactersToRender; i++){
-        if(text[i] == "&"){
+        if(text[i] == "&" || text[i] == "#"){
             Xoffset = 0;
             Yoffset += 36;
             i++;
