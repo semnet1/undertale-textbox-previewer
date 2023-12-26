@@ -36,7 +36,7 @@ function printText(font, text, x, y, color, shake){
             if(text[i+1] == "X") color = "#000000";
             if(text[i+1] == "B") color = "#0000FF";
             if(text[i+1] == "O") color = "#FFA040";
-            if(text[i+1] == "L") color = "#FFFF00";
+            if(text[i+1] == "L") color = "#00FFFF";
             if(text[i+1] == "P") color = "#FF00FF";
             if(text[i+1] == "p") color = "#D4BBFF";
 
